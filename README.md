@@ -41,17 +41,17 @@ A separate Claude session, with no access to our working notes, re-checked the a
    - nothing in the margin table;
    - none of the input floors 63, 75, 143, 153, 176.
 
-   Run `code/kp_equality_check.py` to see this. So at r = 7 only the Kang–Pikhurko *inequality* is used. We offer this as a complement to the repair above, not as a replacement for it. We did not check it for r = 8 or r = 9. We did not find this remark in the sources we could read, but the full r = 7, 8, 9 screen by nwinter's agents is not public, so it may already be there.
+   Run `kp_equality_check.py` to see this. So at r = 7 only the Kang–Pikhurko *inequality* is used. We offer this as a complement to the repair above, not as a replacement for it. We did not check it for r = 8 or r = 9. We did not find this remark in the sources we could read, but the full r = 7, 8, 9 screen by nwinter's agents is not public, so it may already be there.
 2. **A short alternative proof of the level-3 exclusion (T₃ = 1)** that uses neither Theorem 2.2 nor the hypothesis ω ≤ r − 1. It is in Section 3 of the audit PDF. It uses the same method as Sneiderman's Theorem 2.2 ("maximum degree + strict coloured density"). It is an independent check, not a new method.
 3. **An independent re-implementation for Lemma 3.2** (weighted light edge), following the same idea as the author's Sage route but with networkx instead of nauty. It enumerates the networkx atlas of all unlabelled 7-vertex graphs and recovers labelled counts as 7!/|Aut|. It gives the same 40 / 65 / 97 / 131 graph types, the same labelled counts and the same table of extrema as the author's two checkers.
 
 ## Contents
 
 ```
-paper/audit_r6_r7.pdf       the audit (LaTeX source alongside)
-code/ladder.py              reimplementation of the thresholds T_s, the recursion B_r(a,m) and the margin table
-code/kp_equality_check.py   Observation 2: recomputes everything without the Kang–Pikhurko equality "+1"
-code/light_edge.py          independent re-implementation of the r = 7 finite lemma
+audit_r6_r7.pdf             the audit (LaTeX source: audit_r6_r7.tex)
+ladder.py                   reimplementation of the thresholds T_s, the recursion B_r(a,m) and the margin table
+kp_equality_check.py        Observation 2: recomputes everything without the Kang–Pikhurko equality "+1"
+light_edge.py               independent re-implementation of the r = 7 finite lemma
 SHA256SUMS                  checksums of the files above
 ```
 
@@ -61,7 +61,6 @@ You need Python 3.9 or later, and `networkx` for `light_edge.py`. Each script ru
 
 ```bash
 pip install networkx
-cd code
 python3 ladder.py 7              # thresholds {2:0, 3:1, 4:2, 5:5}, margin table, floors 63 75 143 153 176
 python3 kp_equality_check.py     # "values that change: none", "margin table identical: True"
 python3 light_edge.py            # types {6:40, 7:65, 8:97, 9:131}; (i) True, (ii) True
