@@ -1,0 +1,170 @@
+% Independent check of Sneiderman's r = 6 and r = 7 proofs, 6 October 2026.
+\documentclass[11pt]{amsart}
+\usepackage{amsmath,amssymb}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\theoremstyle{remark}\newtheorem*{remark}{Remark}
+\title{Erd\H{o}s Problem 617: an independent check of the fixed cases $r=6$ and $r=7$}
+\author{Gael Irambona (with the AI assistant Claude)}
+\date{6 October 2026}
+\begin{document}
+\maketitle
+
+\section*{Scope and sources}
+We audited, line by line, R.~Sneiderman's manuscripts for $r=6$ (\texttt{r6/main.tex}, dated 18 July 2026) and for $r=7$
+(\texttt{r7-r8/main.tex}, Sections~2 and~3--4), from the repository \texttt{Robby955/erdos-617-fixed-cases},
+commit \texttt{fb628c8} (25 July 2026). The case $r=8$, the case $r=9$ and the SAT certificates were \emph{not} audited.
+The audit was done by an AI system (Claude) working with a human partner. It is \emph{not} an expert referee report.
+Every computation used was small (graphs on at most $7$ vertices, and integer recursions for $r=7$).
+
+\paragraph{Verdict.} Beyond the written repair already posted by nwinter's agents (see Prior work), we found \textbf{no mathematical error in the parts we checked}. Every inequality and case split of the human-readable chain
+was redone by hand; the recursion values and the finite lemma were recomputed by machine only. We found one minor expository
+gap (Section 1). We also make three observations: Observations~1 and~2 show that neither proof needs the Kang--Pikhurko
+equality characterization, and Lemma~2 gives an independent short proof of the level-$3$ exclusion, which removes the need for
+Theorem~2.2 and for $\omega\le r-1$ at level~$3$.
+
+\section*{Prior work (checked 6 October 2026)}
+\begin{itemize}
+\item \textbf{$r=6$ was already reviewed} by Nick Winter's project (\texttt{nwinter/erdos-617-r5}, \texttt{reviews/sneiderman-r6.md}, 29--30 July 2026; verdict SURVIVES),
+  and the $r=6$ theorem was formalized there in Lean~4. That review already contains \emph{both} of our $r=6$ points:
+  the redundancy of the endpoint lemma (addendum of 30 July, also found by the project's second AI team, GPT-5.6-Sol-based and called ``team-sol'' in that repository) and the missing
+  ``nonbipartite'' line (its \S8.3). Our Observation~1 and the expository gap below are therefore \textbf{independent confirmations, not new}.
+\item \textbf{$r=7$:} the proof-claims thread (read in full at erdosproblems.com/617 on 6 Oct.\ 2026) shows no comment on the $r=7,8$ claim.
+  A comment by nwinter's agents on the $r=9$ claim (31 July) screens $r=7,8,9$: ``PASS after required written repair''. It flags
+  (i) the inference ``all old parts have order $r$'' at \texttt{r7-r8/main.tex} line 403, with a three-step repair, and (ii) the eight-set-cap
+  sentence at line 642, which belongs to the $\delta=7$ branch only. It also states that the $r=7$ enumeration was verified in full.
+  \textbf{Our pass did not flag (i) or (ii)}; on re-reading we confirm both. Our Observation~2 (the passage is not load-bearing at $r=7$)
+  was not found in the sources consulted. Their full screen document is not public, so we do not call it new.
+\end{itemize}
+
+\section{The case $r=6$}
+\paragraph{Checked by hand.}
+\begin{itemize}
+\item Lemmas 2.4 (neighbourhood accounting), 2.5 (averaging), 2.6 (clique peeling), 2.7 (terminal complement).
+\item Proposition 3.1 ($P_3$): the table $d=0,\dots,4$ (lower bounds $94,81,71,62,56$); the case $d=5$ (the bound
+  $1\le m\le a\le 4$, the cover argument with $\tau(L)\ge7$, the three sub-cases $m\le2$, $m=3$, $m=4$); the case $d=6$
+  (equality forcing $Y=X=10$, $e(L)=26$, and the classification of $5$-edge graphs on $6$ vertices, which forces $M=K_{1,5}$).
+\item Proposition 4.1 ($19$ vertices): the bounds $108,95,83,74$; $d=4$ (forced isolated $K_5$, a $5$-regular $L$, then Lemma 2.7);
+  $d=5$ ($m+z\le5$, cover of size $\le6<8$); $d=6$. In the case $d=6$ we checked every degree-sequence sub-case:
+  triangle-free $M$ with $m=5,\dots,9$, and the case where $M$ has a triangle, which ends at the forced weights $(5,5,2)$ and a $K_6$.
+\item Propositions 5.1, 5.2 and 6.1: every averaging fraction in the three tables was recomputed exactly; the peeling chain
+  $31\to25\to19\to13$ with edge bounds $96,81,66,51$; the final step at $13$ vertices.
+\item Main proof: $e(G)\le111$, $\delta(G)\le5$ by Brooks, and the last table (all entries $<96$; the case $d=5$ gives exactly $96$).
+\end{itemize}
+
+\paragraph{Observation 1 (Lemma 2.3 is not needed).}
+Lemma 2.3 (the $18$-vertex endpoint) is the only place where the $r=6$ proof uses the equality characterization of Kang--Pikhurko.
+Its conclusion $e(R)\ge51$ is used only in the case $d=5$ of Proposition 3.1. There it already follows from the accounting:
+\[
+ e(R)=d+(X+Y)+e(R[U])\;\ge\;5+\binom52+36=51 .
+\]
+Here $X+Y\ge\binom52$ comes from Lemma 2.4, and $e(R[U])\ge 66-30=36$ comes from $\Delta(L)\le5$ on $12$ vertices.
+So Lemma 2.3 can be deleted, together with the ``three-partite'' branch at the start of the proof of Proposition 3.1. The whole $r=6$ proof then rests on three external facts:
+\begin{itemize}
+\item Brooks's theorem;
+\item the bound $e(L)\le\lfloor (n-1)^2/4\rfloor+1$ for non-bipartite triangle-free graphs (the case $q=2$ of Kang--Pikhurko, used once, with $n=11$);
+\item elementary counting.
+\end{itemize}
+We note also that this proof uses no multi-colour density bound: only the one-colour consequences of the hypothesis
+(local cap, $\alpha\le6$, $e(G)\le111$).
+
+\paragraph{Minor expository gap ($r=6$).} In Proposition 3.1, case $d=6$, the sentence ``$L$ is triangle-free and nonbipartite''
+is not justified in the text. It follows at once from $\alpha(L)\le5$: a bipartition of $11$ vertices has a side of order $\ge6$.
+
+\section{The case $r=7$}
+\paragraph{Checked by hand.}
+\begin{itemize}
+\item The shared setup: the local cap; the degree window (Brooks); the strict coloured density (7) via Kang--Pikhurko applied to
+  each other colour.
+\item Theorem 2.1 (terminal core). At $n=2r=14$ it uses Andr\'asfai--Erd\H{o}s--S\'os: $L$ is $6$-regular and $6>2\cdot14/5$.
+\item Theorem 2.2 (exact ladder). We re-derived the linear form: the $t$-coefficient is $A_s$ and the constant term is $-\widehat B_s$.
+  We recomputed the thresholds by hand:
+  \[
+   A_3=23,\ \widehat B_3=-3\Rightarrow T_3=1;\quad A_4=27,\ \widehat B_4=48\Rightarrow T_4=2;\quad
+   A_5=31,\ \widehat B_5=127\Rightarrow T_5=5 .
+  \]
+\item Proposition 2.3 (block exclusion), including representative selection.
+\item Proposition 2.4 (soundness of the recursion), including the averaging bound $Y\le\frac{r-2}{r}\binom\delta2$ behind $C_r(\delta)$.
+\item The star-and-cover mechanism; Lemma 3.3 ($P_4(28)\ge100$, $P_4(29)\ge113$); Lemma 3.4 ($P_5(35)\ge122$, $P_5(36)\ge134$,
+  $P_6(43)\ge156$, every case of $\delta$); and the main chain $154\to133\to112$, which forces three disjoint $K_7$, against
+  block exclusion.
+\item The input floors $P_3(20)\ge63$ and $P_3(21)\ge75$, through the recursion. For example, $P_3(21)=\max(41+34,\lceil 147/2\rceil)$
+  at $\delta=7$, with $B_7(2,13)=41$ from Kang--Pikhurko and $C_7(7)=34$.
+\end{itemize}
+
+\paragraph{Reproduced independently by computation (small).}
+\begin{itemize}
+\item The margin table $B_r-E_{r,d,j}$ for $r=7$ (the finite entries are $57,42,25,18,28,10,9,5,4$ for $d\le5$, and $-1,-2,-3$ for $d=6$;
+  every $+\infty$ entry comes from the hand-checked thresholds), and the input floors $P_5(37)\ge143$, $P_5(38)\ge153$, $P_5(39)\ge176$.
+  We used our own reimplementation of the recursion, written from the consolidated draft and not from the author's code.
+  All values agree exactly with the author's.
+\item The finite ``weighted light edge'' lemma (Lemma 3.2). We used an independent reimplementation of the idea behind the author's second (Sage/nauty) route, with different tools: the networkx atlas of all
+  unlabelled graphs on $7$ vertices, with labelled counts $7!/|\mathrm{Aut}|$. It reproduces the type counts $40,65,97,131$, the labelled
+  counts $54{,}257$, $116{,}280$, $203{,}490$, $293{,}930$, and the full table of extrema; parts (i) and (ii) hold.
+\end{itemize}
+
+\paragraph{Observation 2 (no equality case needed for $r=7$).}
+The third line of $Q_r$ (the ``$+1$'' gained by excluding the Kang--Pikhurko equality graphs when $m\ge ar+1$) is the only use of
+the equality characterization. We replaced $\lfloor m/a\rfloor$ by $\lfloor m/a\rfloor-1$ in that line and recomputed. All
+values used in the $r=7$ proof are unchanged: the margin table and the floors $63,75,143,153,176$. In fact every $B_7(a,m)$ with
+$a\le6$, $m\le49$ is unchanged. So the $r=7$ proof needs only
+the Kang--Pikhurko \emph{inequality}.
+(In passing, relying on Sneiderman's description of the equality construction: under $\omega\le r-1$, an old part of order $\ge r$ in an equality graph already gives a forbidden clique. So the
+equality exclusion holds as soon as $m-1>a(r-1)$, which is simpler than the argument given.)
+
+\section{A self-contained proof of the level-$3$ exclusion}
+The $r=7$ proof uses $T_3(7)=1$ in Proposition 2.3, in Lemma 3.3, inside Theorem 2.2 (through $\Delta_4=3r+T_3-1$, which feeds
+$T_4$ and $T_5$) and in the recursion ($B_7(3,m)=+\infty$ for $m\ge22$). Lemma~2 below proves a stronger statement (no hypothesis
+$\omega\le r-1$), so it can stand in at every one of these places. Lemma~2 uses the same method as Sneiderman's Theorem~2.2.
+Lemma~1 uses a slightly different route from his Theorem~2.1: the non-bipartite triangle-free bound and the local cap replace
+Andr\'asfai--Erd\H{o}s--S\'os and $\omega\le r-1$. But Lemma~1 needs $|W|\ge2r+1$, so it does \emph{not} replace Theorem~2.1 at
+$|W|=2r=14$, which Lemma 3.3 uses. Neither lemma is a new method; their value is an independent, short certificate.
+Throughout, $G_i$ is any colour graph of a hypothetical counterexample.
+
+\begin{lemma}[Level 2]
+Let $r\ge4$. If $W\subseteq V$ and $\alpha(G_i[W])\le2$, then $|W|\le 2r$.
+\end{lemma}
+\begin{proof}
+Suppose $|W|=2r+1$ (restrict if larger) and put $L=\overline{G_i[W]}$. Then $L$ is triangle-free.
+It is not bipartite: a bipartition would split $W$ into two cliques of $G_i$, one of order $\ge r+1$, and that clique violates the local cap.
+By the $q=2$ case of Kang--Pikhurko, $e(L)\le r^2+1$. By the coloured density bound,
+$e(L)\ge(r-1)p_r(2r+1)=(r-1)(r+2)=r^2+r-2$. This exceeds $r^2+1$ for $r>3$.
+\end{proof}
+
+\begin{lemma}[Level 3]
+Let $r\ge6$. If $W\subseteq V$ and $\alpha(G_i[W])\le3$, then $|W|\le 3r$.
+\end{lemma}
+\begin{proof}
+Suppose $|W|=3r+1$ and put $L=\overline{G_i[W]}$, which is $K_4$-free.
+\begin{itemize}
+\item \emph{Upper bound.} For every $v$, the graph $L[N_L(v)]$ is triangle-free. Hence $\alpha(G_i[N_L(v)])\le2$, and Lemma~1 gives
+  $|N_L(v)|\le2r$. So $e(L)\le (3r+1)r$.
+\item \emph{Lower bound.} Since $|W|>3r$ and $\alpha\le3$, the graph $G_i[W]$ is not $r$-colourable. For each $j\ne i$, the graph
+  $\overline{G_j[W]}\supseteq G_i[W]$ is therefore $K_{r+1}$-free and not $r$-partite. Kang--Pikhurko with $q=r$ and $n=3r+1$ gives
+  $e(G_j[W])\ge p_r(3r+1)+3-1=3r+5$. Summing over the $r-1$ colours $j\neq i$ gives $e(L)\ge(r-1)(3r+5)=3r^2+2r-5$.
+\item \emph{Conclusion.} $3r^2+2r-5>3r^2+r$ for $r\ge6$, a contradiction.
+\end{itemize}
+\end{proof}
+
+\begin{remark}
+Lemma~2 replaces $T_3(r)=1$ wherever it is used for $r\ge6$; in particular, in the $r=7$ proof. It is not a substitute for
+$T_4(7)=2$ and $T_5(7)=5$. These two values come from the ladder argument, whose derivation we re-checked by hand (above).
+The same ``maximum degree + (7)'' argument at level $s$, without $\omega\le r-1$, leaves the gap
+$\Phi_r(s)=-r(s^2-4s+1)-4s+2$ on $2e(L)$. This is positive for $s=3$ ($2r-10$) and negative for $s\ge4$
+($-r-14$, $-6r-18$, \dots). That is why levels $s\ge4$ need the induction through the thresholds $T_{s-1}$.
+\end{remark}
+
+\section{What remains trusted}
+\begin{itemize}
+\item For $r=6$, the external facts are Brooks's theorem and the non-bipartite triangle-free bound (by Observation~1). Nothing computational.
+\item For $r=7$, the published external theorems are Kang--Pikhurko (inequality only, by Observation~2), Andr\'asfai--Erd\H{o}s--S\'os, Brooks
+  and Tur\'an.
+\item The computational inputs of $r=7$ are:
+  \begin{itemize}
+  \item the finite $7$-vertex lemma (machine-checked only), checked by the author's two programs and by our independent one;
+  \item the recursion values (the $9$ finite margin entries for $d\le5$, plus $P_5(37)$, $P_5(38)$, $P_5(39)$), computed by the author's
+    code and reproduced by our independent reimplementation, but \emph{not} checked by hand.
+  \end{itemize}
+\item This audit is not a substitute for expert review. In particular, we did not re-read the Kang--Pikhurko paper itself.
+\end{itemize}
+\end{document}
